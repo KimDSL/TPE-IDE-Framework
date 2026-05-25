@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 function TaskDetail() {
   const { id } = useParams();
@@ -13,6 +13,7 @@ function TaskDetail() {
 
   return (
     <div>
+      <Link to="/">Retour au dashboard</Link>
       <h1>{task.titre}</h1>
       <p>{task.description}</p>
       <p>Statut : {task.statut}</p>

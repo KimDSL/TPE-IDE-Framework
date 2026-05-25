@@ -1,5 +1,6 @@
 import { useState } from "react";
 import TaskCard from "../components/TaskCard";
+import TaskCard from "../components/TaskForm";
 
 function Dashboard() {
   const [tasks, setTasks] = useState([
@@ -19,9 +20,15 @@ function Dashboard() {
   ]);
 }
 
+function handleAddTask(nouvelleTache) {
+  setTasks([...tasks, nouvelleTache]);
+}
+
 return (
   <div>
     <h1>Dashboard</h1>
+
+    <TaskForm onAddTask={handleAddTask} />
 
     {tasks.map((task) => (
       <TaskCard key={task.id} task={task} />

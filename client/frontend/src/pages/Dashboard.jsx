@@ -1,25 +1,32 @@
-import useLocalStorage from "../hooks/useLocalStorage";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import TaskCard from "../components/TaskCard";
 import TaskForm from "../components/TaskForm";
 
-function Dashboard() {
-  const [tasks, setTasks] = useLocalStorage("taskflow_data", [
-    {
-      id: 1,
-      titre: "Conception de l'ontologie",
-      description: "Rédiger les axiomes de base du domaine.",
-      statut: "A faire"
-    },
-    {
-      id: 2,
-      titre: "Analyse des besoins",
-      description: "Identifier les exigences fonctionnelles.",
-      statut: "En cours"
-    }
-  ]);
+const API_URL = "http://localhost:5000/api/tasks";
 
-  function handleAddTask(nouvelleTache) {
-    setTasks([...tasks, nouvelleTache]);
+function Dashboard() {
+  const [tasks, setTasks] = useState([]);
+
+  useEffect(() => {
+    axios.get(API_URL)
+      .then(res => setTasks(res.data))
+      .catch(err => console.error("Erreur chargement tâches :", err));
+  }, []);
+
+  async function handleAddTask(nouvelleTache) {
+    try {
+      const res = await axios.post(API_URL, {
+        title: nouvelleTache.titre,
+        description: nouvelleTache.description,
+        status: nouvelleTache.statut
+      });
+      if (res.status === 201) {
+        setTasks([...tasks, res.data]);
+      }
+    } catch (err) {
+      console.error("Erreur ajout tâche :", err);
+    }
   }
 
   return (
@@ -27,7 +34,7 @@ function Dashboard() {
       <h1>Dashboard</h1>
       <TaskForm onAddTask={handleAddTask} />
       {tasks.map((task) => (
-        <TaskCard key={task.id} task={task} />
+        <TaskCard key={task._id} task={task} />
       ))}
     </div>
   );

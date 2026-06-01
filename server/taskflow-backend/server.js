@@ -1,8 +1,15 @@
 const express = require('express');
+const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+// Middleware
+app.use(express.json());
+app.use(cors({
+    origin: 'http://localhost:5173' // Remplacez par l'URL de votre frontend
+}));
 
 // Connexion MongoDB
 const mongoose = require('mongoose');

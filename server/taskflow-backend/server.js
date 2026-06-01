@@ -15,6 +15,8 @@ app.get('/api/ping', (req, res) => {
   res.json({ message: "Serveur TaskFlow operationnel" });
 });
 
+app.use('/api/tasks', taskRoutes);
+
 app.listen(PORT, () => {
   console.log(`Serveur démarré sur le port ${PORT}`);
 });

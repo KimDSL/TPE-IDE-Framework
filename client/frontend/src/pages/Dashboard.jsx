@@ -19,7 +19,7 @@ function Dashboard() {
       const res = await axios.post(API_URL, {
         title: nouvelleTache.titre,
         description: nouvelleTache.description,
-        status: nouvelleTache.statut
+        completed: false   // ← corrigé
       });
       if (res.status === 201) {
         setTasks([...tasks, res.data]);

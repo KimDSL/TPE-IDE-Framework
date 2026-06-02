@@ -13,9 +13,18 @@ app.use(cors({
 
 // Connexion MongoDB
 const mongoose = require('mongoose');
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log('MongoDB connecté'))
-    .catch((err) => console.error('Erreur de connexion à MongoDB:', err));
+const taskRoutes = require('./routes/taskRoutes');
+
+// Prépare la connexion (utilise une URI locale si `MONGO_URI` n'est pas défini)
+const mongoUri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/taskflow';
+mongoose.set('strictQuery', false);
+mongoose
+  .connect(mongoUri)
+  .then(() => {
+    if (process.env.MONGO_URI) console.log('MongoDB connecté (Atlas)');
+    else console.log('MongoDB connecté (local)');
+  })
+  .catch((err) => console.error('Erreur de connexion à MongoDB:', err.message));
 
 // Route de test
 app.get('/api/ping', (req, res) => {
